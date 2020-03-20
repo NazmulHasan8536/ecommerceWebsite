@@ -40,12 +40,12 @@
 
         <h2 class="text-uppercase text-bold bg-primary text-light">Insert New Category</h2>
 
-    <form action="{{url('/category/update/'.$category->id)}}"  method="Post">
+    <form action="{{route('storeCategory')}}"  method="Post">
     @csrf
       <div class="control-group">
         <div class="form-group floating-label-form-group controls">
           <label>Title</label>
-        <input type="text" class="form-control" name="name" value="{{$category->name}}" id="title" placeholder="Title of the post">
+          <input type="text" class="form-control" name="name" placeholder="title" id="title" placeholder="Title of the post">
           <p class="help-block text-danger"></p>
         </div>
       </div>
@@ -54,14 +54,14 @@
 
       <div class="control-group">
         <div class="form-group col-xs-12 floating-label-form-group controls">
-        <input type="text" class="form-control" name="description" value="{{$category->slug}}">
+          <input type="text" class="form-control" name="description" placeholder="write something about the category">
         </div>
       </div>
       <br>
       <br>
       <div id="success"></div>
       <div class="form-group">
-        <button type="submit" class="btn btn-outline-success" >Update Category</button>
+        <button type="submit" class="btn btn-outline-success" >Add Category</button>
         
       </div>
     </form>

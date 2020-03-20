@@ -14,11 +14,11 @@ class MainController extends Controller
         return view('frontend.about');
     }
     
-    public function post(){
-        return view('frontend.post');
-    }
     
     public function contact(){
         return view('frontend.contact');
     }
+
+
+    
 }
