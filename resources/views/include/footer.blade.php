@@ -77,32 +77,7 @@
 
         </script>
 
-        {{-- Sweet Alert Implement  --}}
-
-        <script>
-
-          $(document).on('click','#delete',function(e){
-            e.preventDefault();
-            var link = $(this).attr('href');
-
-            swal({
-          title: "Are you sure?",
-          text: "Once deleted, you will not be able to recover this imaginary file!",
-          icon: "warning",
-          buttons: true,
-          dangerMode: true,
-        })
-        .then((willDelete) => {
-          if (willDelete) {
-            window.location.href = link;
-          } else {
-            swal("Your imaginary file is safe!");
-          }
-          });
-            
-          });
-           
-        </script>
+        
 
 </body>
 
