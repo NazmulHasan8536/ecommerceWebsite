@@ -41,6 +41,8 @@ Route::prefix('category')->group(function(){
 // post 
 
 route::prefix('post')->group(function(){
-    route::get('All-post','post\PostController@index')->name('post');
-    route::get('Add-post','post\postController@create')->name('AddPost');
+    route::get('All-post','post\PostController@index')->name('AllPost');
+    route::get('Add-post','post\PostController@create')->name('AddPost');
+    route::post('store','post\PostController@store')->name('allStore');
+    route::get('/view/{id}','post\PostController@viewPost');
 });
