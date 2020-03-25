@@ -13,9 +13,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-})->name('/');
+// Route::get('/', function () {
+//     return view('welcome');
+// })->name('/');
+// route::get()
 
 
 
@@ -45,4 +46,7 @@ route::prefix('post')->group(function(){
     route::get('Add-post','post\PostController@create')->name('AddPost');
     route::post('store','post\PostController@store')->name('allStore');
     route::get('/view/{id}','post\PostController@viewPost');
+    route::get('/edit/{id}','post\PostController@editPost');
+    route::post('/update/{id}','post\PostController@updatePost');
+    route::get('/delete/{id}','post\PostController@deletePost');
 });
