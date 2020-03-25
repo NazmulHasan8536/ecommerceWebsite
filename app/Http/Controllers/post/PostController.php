@@ -98,4 +98,101 @@ class PostController extends Controller
                 // dd($post);
                 return view ('post.view',compact('post'));
     }
+
+
+
+
+    // Edit Post Controller 
+    public function editPost($id){
+        // dd($id);
+        $category = DB::table('categories')->get()->latest();
+        $post = DB::table('posts')->where('id',$id)->first();
+        return view('post.edit',['category' => $category, 'post' => $post]);
+    }
+
+
+    // update Post 
+    public function updatePost(Request $request,$id){
+        // dd($id);
+
+
+        $request->validate([
+            'title' => 'required|max:50|min:4',
+            'description' => 'required|min:4',
+            'image' => 'mimes:jpeg,jpg,png,JPG,JPEG,PNG',
+        ]);
+
+
+        $data = array();
+        $data['category_id'] = $request->category_id;
+        $data['title'] = $request->title;
+        $data['description'] = $request->description;
+        // image upload part 
+        $image=$request->file('image'); //ইমেজ ধরব এখানে input এর নাম image 
+
+            if($image){
+
+                // ডাটা ফোল্ডার এ ইন্সারট করার জন্য 
+
+                $image_name = hexdec(uniqid()); // একটা random নামের জন্য ।
+                $ext = strtolower($image->getClientOriginalExtension()); // member function সকল ডাটা ছোট হাতের করার জন্য ।
+                $image_full_name = $image_name.'.'.$ext; //conket কিংবা যোগ করার জন্য ।
+                $upload_path = 'public/frontend/image/' ;  // Image Path , অবশ্যই শেষে '/' দিতে হবে ।
+                $image_url = $upload_path.$image_full_name; // Image url টা আপলোড করে url store করে দিলাম ।
+                $success=$image->move($upload_path,$image_full_name); //Image path দিয়ে , image er ফুল্ল নাম দিয়ে move করলাম ।
+
+                $data['image'] = $image_url; //$data['image'] হল ডাটাবেস এর ফিল্ড , $image_url holo iage path dekhano .
+                
+                unlink($request->old_photo); // old image ডিলিট করা ।
+
+                DB::table('posts')->where('id',$id)->update($data); //posts টেবিলে ডাটা ইন্সারট হল
+                //notification এর জন্য 
+                $notification = array(
+                    'message'=>'Successfully Data updated',
+                    'alert-type'=>'success'
+                );
+                return Redirect()->route('AllPost')->with($notification);
+
+            }else{
+                $data['image'] = $request->old_photo; // যদি আমার ইমেজ না দেওয়া হয় তাহলে ডাটা আপলোড হবে 
+                DB::table('posts')->where('id',$id)->update($data); //posts টেবিলে ডাটা ইন্সারট হল
+               
+                 
+                //notification এর জন্য 
+                $notification = array(
+                    'message'=>'Successfully Data updated',
+                    'alert-type'=>'success'
+                );
+                return Redirect()->route('AllPost')->with($notification); //redirect(পেইজ এর নাম)
+            
+            }
+
+
+    }
+
+
+
+    // delete controller 
+
+    public function deletePost($id){
+        // dd($id);
+        $posts = DB::table('posts')->where('id',$id)->first(); //posts ar single data id akare anar jonno
+        $image = $posts->image; // variable diclared kore posts image ar image $image er moddhe pathano 
+        
+        $data = DB::table('posts')->where('id',$id)->delete();
+        if($data){
+            unlink($image); //data delete korar jonno 
+            $notification = array(
+                'message'=>'Successfully Data updated',
+                'alert-type'=>'success'
+            );
+            return Redirect()->route('AllPost')->with($notification); 
+        }else{
+            $notification = array(
+                'message'=>'Something went wrong',
+                'alert-type'=>'Error'
+            );
+            return Redirect()->route('AllPost')->with($notification); 
+        }
+    }
 }
